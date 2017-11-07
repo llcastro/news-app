@@ -5,7 +5,7 @@
 	 infinite-scroll-distance="2">
       <md-card class="column is-3"
 	       md-with-hover
-	       v-for="item in content.results"
+	       v-for="item in content"
 	       :key="item.id">
 	<div @click="showDetails(item.id)">
 	  <md-card-media md-big>
@@ -20,9 +20,16 @@
 	    </md-card-header-text>
 	  </md-card-header>
 	</div>
+
+	<md-card-actions>
+	  <md-button class="md-icon-button md-raised" :class="item.bookmarked"
+	             @click="addBookmark(item)">
+	    <md-icon>bookmark</md-icon>
+	  </md-button>
+	</md-card-actions>
       </md-card>
     </div>
-    <div v-if="content.results && content.results.length === 0">
+    <div v-if="content && content.length === 0">
       <h2>Sem notícias</h2>
     </div>
 
@@ -31,12 +38,7 @@
 </template>
 
 <script>
- import vue from 'vue';
- import infinite_scroll from 'vue-infinite-scroll';
- 
- import guardian_api from '../../conf.json';
- 
- vue.use(infinite_scroll);
+ var guardian_api = require('../../conf.json');
 
  export default {
    data() {
@@ -48,6 +50,19 @@
    methods: {
      showDetails(id) {
        this.$router.push({ name: 'category.detail', params: { id: id }});
+     },
+     addBookmark(item) {
+       if (item.bookmarked === 'md-accent') {
+	 item.bookmarked = 'md-primary';
+       } else {
+	 item.bookmarked = 'md-accent';
+       }
+       /*
+	  db.collection('bookmarks').add({
+	  user: 'test',
+	  id: id
+	  });
+	*/
      },
      loadMore() {
        if (this.last_page > 0) {
@@ -65,7 +80,10 @@
      },
      loadData() {
        this.$http.get(guardian_api.guardian.url + this.$route.params.category, { params : { "api-key" : guardian_api.guardian.api_key, "show-fields": "thumbnail", "page-size" : 10, "order-date" : "published" }}).then(response => {
-	 this.content = response.data.response;
+	 response.data.response.results.forEach(item => {
+	   item.bookmarked = 'md-primary';
+	 });
+	 this.content = response.data.response.results;
 	 this.last_page = 1;
        });
      }

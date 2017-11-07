@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <md-toolbar class="md-medium columns md-fixed">
       <md-button class="md-icon-button" @click="toggleLeftSidenav">
 	<md-icon>menu</md-icon>
@@ -48,19 +48,7 @@
 </template>
 
 <script>
- import vue from 'vue';
- import vuerouter from 'vue-router';
- import moment from 'moment';
- 
- import guardian_api from '../conf.json';
-
- vue.use(vuerouter);
-
- vue.filter('formatDate', value => {
-   if (value) {
-     return moment(String(value)).format('DD/MM/YYYY h:mm a');
-   }
- });
+ var guardian_api = require('../conf.json');
  
  export default {
    data() {

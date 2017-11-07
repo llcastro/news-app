@@ -31,12 +31,7 @@
 </template>
 
 <script>
- import vue from 'vue';
- import infinite_scroll from 'vue-infinite-scroll';
-
- import guardian_api from '../../conf.json';
-
- vue.use(infinite_scroll);
+ var guardian_api = require('../../conf.json');
  
  export default {
    data() {

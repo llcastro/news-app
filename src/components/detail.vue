@@ -20,9 +20,7 @@
 </template>
 
 <script>
- import vue from 'vue';
-
- import guardian_api from '../../conf.json';
+ var guardian_api = require('../../conf.json');
  
  export default {
    data() {

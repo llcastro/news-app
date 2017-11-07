@@ -18,7 +18,8 @@ mix.extract(['vue-material',
 	     'vue-router',
 	     'vue-resource',
 	     'vue-infinite-scroll',
-	     'moment'],
+	     'moment',
+	     'firebase'],
 	    'lib/vendor.js');
 
 // Full API
