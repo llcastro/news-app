@@ -9,10 +9,10 @@ let mix = require('laravel-mix');
  | for your Laravel application. By default, we are compiling the Sass
  | file for your application, as well as bundling up your JS files.
  |
- */
+*/
 
-mix.autoload({})
-  .js('src/main.js', 'lib/app.js');
+mix
+  .js('src/main.js', 'lib/main.js');
 
 mix.extract(['vue-material',
 	     'vue-router',

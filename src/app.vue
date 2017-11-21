@@ -7,7 +7,7 @@
       
       <h1 class="md-title">The Journal</h1>
 
-      <div class="field has-addons column">
+      <div class="field has-addons column" style="flex: 1">
 	<p class="control is-7">
 	  <input class="input"
 		 type="text"
@@ -24,6 +24,33 @@
 	  <a class="button is-danger" @click="apagar()">
 	    <i class="material-icons">delete</i>
 	  </a>
+	</p>
+      </div>
+
+      <div v-if="!isLogged" class="columns" style="flex: 1">
+	<p class="control is-5">
+	  <input class="input"
+		 type="text"
+		 placeholder="e-mail"
+		 v-model="email">
+	</p>
+	<p class="control is-5">
+	  <input class="input"
+		 type="password"
+		 placeholder="senha"
+		 v-model="passwd">
+	</p>
+	<p class="control">
+	  <a class="button is-primary" @click="login()">Login</a>
+	</p>
+	<p class="control">
+	  <a class="button is-primary" @click="register()">Registrar</a>
+	</p>
+      </div>
+
+      <div v-if="isLogged" style="flex: 0">
+	<p class="control">
+	  <a class="button is-primary" @click="logout()">Logout</a>
 	</p>
       </div>
     </md-toolbar>
@@ -54,7 +81,10 @@
    data() {
      return {
        categorias: [],
-       texto_busca: ''
+       texto_busca: '',
+       email: '',
+       passwd: '',
+       isLogged: false
      }
    },
    methods: {
@@ -62,6 +92,34 @@
        if (this.texto_busca) {
 	 this.$router.push({ name: 'search', params: { q: this.texto_busca }});
        }
+     },
+     login() {
+       firebase.auth()
+	       .signInWithEmailAndPassword(this.email, this.passwd)
+	       .then(response => {
+		 this.email = response.email;
+		 this.isLogged = true;
+		 window.localStorage.isLogged = true;
+	       })
+	       .catch(error => {
+		 console.error(error.message);
+		 this.isLogged = false;
+		 window.localStorage.isLogged = false;
+	       });
+     },
+     logout() {
+       firebase.auth()
+	       .signOut()
+	       .then(() => {
+		 this.isLogged = false;
+		 delete window.localStorage.isLogged;
+	       })
+	       .catch(err => {
+		 console.error(error.message);
+	       });
+     },
+     register() {
+       this.$router.push({ name: 'home' });
      },
      apagar() {
        this.texto_busca = '';
@@ -87,6 +145,8 @@
      });
 
      this.$router.push({ name: 'category', params: { category: 'technology' }});
+
+     this.isLogged = window.localStorage.isLogged || false;
    }
  }
 </script>

@@ -3,8 +3,7 @@ import vuerouter from 'vue-router';
 import 'vue-material/dist/vue-material.css';
 import vue_material from 'vue-material';
 import vue_resource from 'vue-resource';
-import bulma from 'bulma';
-import infinite_scroll from 'vue-infinite-scroll';
+import 'bulma/css/bulma.css';
 import moment from 'moment';
 import firebase from 'firebase';
 import firestore from 'firebase/firestore';
@@ -15,16 +14,16 @@ import detail from './components/detail.vue';
 import category from './components/category.vue';
 import search from './components/search.vue'; // identical to category
 
-window.vue = vue;
-
 vue.use(vuerouter);
 vue.use(vue_material);
 vue.use(vue_resource);
-vue.use(bulma);
-vue.use(infinite_scroll);
 vue.use(moment);
 
+window.vue = vue;
+
 var config = require('../conf.json');
+
+window.config = config;
 firebase.initializeApp(config.firestore);
 
 window.firebase = firebase;
@@ -72,8 +71,7 @@ const router = new vuerouter({
 });
 
 new vue({
-  el: '#app',
   router,
   template: '<app></app>',
   components: { app }
-});
+}).$mount('#app');

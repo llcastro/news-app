@@ -10,7 +10,7 @@
 	<section class="modal-card-body">
 	  <p v-if="content !== null" class="image is-3by2">
 	    <img v-if="content.content.fields.thumbnail" :src="content.content.fields.thumbnail">
-	    <img v-if="!content.content.fields.thumbnail" src="../../images/no_img.png">
+	    <img v-if="!content.content.fields.thumbnail" src="../assets/no_img.png">
 	  </p>
 	  <div v-if="content !== null" v-html="content.content.fields.body"></div>
 	</section>

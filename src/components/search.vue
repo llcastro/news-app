@@ -10,7 +10,7 @@
 	<div @click="showDetails(item.id)">
 	  <md-card-media md-big>
 	    <img v-if="item.fields" :src="item.fields.thumbnail"/>
-	    <img v-if="!item.fields" src="../../images/no_img.png"/>
+	    <img v-if="!item.fields" src="../assets/no_img.png"/>
 	  </md-card-media>
 
 	  <md-card-header>
@@ -32,6 +32,8 @@
 
 <script>
  var guardian_api = require('../../conf.json');
+
+ import infinite_scroll from 'vue-infinite-scroll';
  
  export default {
    data() {
@@ -39,6 +41,9 @@
        content: [],
        last_page: 0
      }
+   },
+   directives: {
+     infiniteScroll: infinite_scroll
    },
    methods: {
      showDetails(id) {
@@ -49,8 +54,8 @@
 	 this.$http.get(guardian_api.guardian.url + 'search', { params : { "api-key" : guardian_api.guardian.api_key, "show-fields": "thumbnail", "page-size" : 10, "page" : this.last_page + 1, "order-date" : "published", "q": this.$route.params.q }}).then(response => {
 	   if(response.data.response.status === 'ok') {
 	     response.data.response.results.forEach(item => {
-	       if (this.content.results) {
-		 this.content.results.push(item);
+	       if (this.content) {
+		 this.content.push(item);
 	       }
 	     });
 	   }
