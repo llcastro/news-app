@@ -20,13 +20,6 @@
 	    </md-card-header-text>
 	  </md-card-header>
 	</div>
-
-	<md-card-actions>
-	  <md-button class="md-icon-button md-raised" :class="item.bookmarked"
-	             @click="addBookmark(item)">
-	    <md-icon>bookmark</md-icon>
-	  </md-button>
-	</md-card-actions>
       </md-card>
     </div>
     <div v-if="content && content.length === 0">
@@ -56,20 +49,6 @@
      showDetails(id) {
        this.$router.push({ name: 'category.detail', params: { id: id }});
      },
-     addBookmark(item) {
-       if (item.bookmarked === 'md-accent') {
-	 item.bookmarked = 'md-primary';
-       } else {
-	 item.bookmarked = 'md-accent';
-       }
-       console.log(item.id);
-       /*
-	  db.collection('bookmarks').add({
-	  user: 'test',
-	  id: id
-	  });
-	*/
-     },
      loadMore() {
        if (this.last_page > 0) {
 	 this.$http.get(guardian_api.guardian.url + this.$route.params.category, { params : { "api-key" : guardian_api.guardian.api_key, "show-fields": "thumbnail", "page-size" : 10, "page" : this.last_page + 1, "order-date" : "published" }}).then(response => {
@@ -86,9 +65,6 @@
      },
      loadData() {
        this.$http.get(guardian_api.guardian.url + this.$route.params.category, { params : { "api-key" : guardian_api.guardian.api_key, "show-fields": "thumbnail", "page-size" : 10, "order-date" : "published" }}).then(response => {
-	 response.data.response.results.forEach(item => {
-	   item.bookmarked = 'md-primary';
-	 });
 	 this.content = response.data.response.results;
 	 this.last_page = 1;
        });

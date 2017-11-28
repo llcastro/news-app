@@ -14,6 +14,11 @@
 	  </p>
 	  <div v-if="content !== null" v-html="content.content.fields.body"></div>
 	</section>
+	
+	<footer class="modal-card-foot">
+	  <button :class="classe" v-if="!doc_id" @click="save()">Bookmark</button>
+	  <button :class="classe" v-if="doc_id" @click="remove()">Remove bookmark</button>
+	</footer>
       </div>
     </div>
   </div>
@@ -25,16 +30,56 @@
  export default {
    data() {
      return {
-       content: null
+       content: null,
+       doc_id: null,
+       classe: 'button is-primary'
      }
    },
    methods: {
      close() {
        this.$router.go(-1);
      },
+     save() {
+       db.collection('bookmarks').add({
+	 user_email: localStorage.user_email,
+	 id: this.content.content.id
+       })
+	 .then(doc => {
+	   this.doc_id = doc.id;
+	 })
+	 .catch(error => {
+	   console.error('error', error);
+	 });
+       this.classe = 'button is-danger';
+     },
+     remove() {
+       db.collection('bookmarks')
+	 .doc(this.doc_id)
+	 .delete()
+	 .then(() => {
+	   this.doc_id = null;
+	 })
+	 .catch(error => {
+	   console.error('error: ', error);
+	 });
+       this.classe = 'button is-primary';
+     },
      loadData() {
        this.$http.get(guardian_api.guardian.url + this.$route.params.id, { params : { "api-key" : guardian_api.guardian.api_key, "show-fields": "thumbnail,body", "order-date" : "published" }}).then(response => {
 	 this.content = response.data.response;
+	 db.collection("bookmarks")
+	   .where("id", "==", this.content.content.id)
+	   .where("user_email", "==", localStorage.user_email)
+	   .get()
+	   .then(docs => {
+	     docs.forEach(doc => {
+	       this.doc_id = doc.id;
+	       this.classe = 'button is-danger';
+	     });
+	   })
+	   .catch(error => {
+	     console.error('error: ', error);
+	   });
        });
      }
    },

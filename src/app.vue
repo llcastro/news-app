@@ -27,31 +27,31 @@
 	</p>
       </div>
 
-      <div v-if="!isLogged" class="columns" style="flex: 1">
-	<p class="control is-5">
+      <div v-if="!isLogged" class="field is-grouped" style="flex: 1.2">
+	<div class="control is-5">
 	  <input class="input"
 		 type="text"
 		 placeholder="e-mail"
 		 v-model="email">
-	</p>
-	<p class="control is-5">
+	</div>
+	<div class="control is-5">
 	  <input class="input"
 		 type="password"
 		 placeholder="senha"
 		 v-model="passwd">
-	</p>
-	<p class="control">
-	  <a class="button is-primary" @click="login()">Login</a>
-	</p>
-	<p class="control">
-	  <a class="button is-primary" @click="register()">Registrar</a>
-	</p>
+	</div>
+	<div class="control">
+	  <button class="button is-primary" @click="login()">Login</button>
+	</div>
+	<div class="control">
+	  <button class="button is-light" @click="register()">Registrar</button>
+	</div>
       </div>
 
-      <div v-if="isLogged" style="flex: 0">
-	<p class="control">
-	  <a class="button is-primary" @click="logout()">Logout</a>
-	</p>
+      <div v-if="isLogged" class="field is-grouped" style="flex: 0">
+	<div class="control">
+	  <button class="button is-primary" @click="logout()">Logout</button>
+	</div>
       </div>
     </md-toolbar>
 
@@ -100,6 +100,7 @@
 		 this.email = response.email;
 		 this.isLogged = true;
 		 window.localStorage.isLogged = true;
+		 window.localStorage.user_email = response.email;
 	       })
 	       .catch(error => {
 		 console.error(error.message);
@@ -113,6 +114,7 @@
 	       .then(() => {
 		 this.isLogged = false;
 		 delete window.localStorage.isLogged;
+		 delete window.localStorage.user_email;
 	       })
 	       .catch(err => {
 		 console.error(error.message);
