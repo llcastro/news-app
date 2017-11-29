@@ -66,6 +66,11 @@ const router = new vuerouter({
       path: '/',
       name: 'home',
       component: home
+    },
+    {
+      path: '/app',
+      name: 'app',
+      component: app
     }
   ]
 });
